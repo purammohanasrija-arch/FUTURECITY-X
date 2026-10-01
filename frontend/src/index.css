@@ -1,0 +1,124 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --cyber-cyan: #00f0ff;
+    --cyber-green: #00ff9d;
+    --cyber-amber: #ffaa00;
+    --cyber-pink: #ff007f;
+    --cyber-bg: #050811;
+  }
+
+  body {
+    background-color: #050811;
+    color: #e2e8f0;
+    overflow-x: hidden;
+  }
+}
+
+/* Custom Cyber Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #070b19;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 240, 255, 0.3);
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 240, 255, 0.7);
+  box-shadow: 0 0 10px rgba(0, 240, 255, 0.6);
+}
+
+/* Cyber Grid Background */
+.cyber-grid-bg {
+  background-image: 
+    linear-gradient(to right, rgba(0, 240, 255, 0.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(0, 240, 255, 0.05) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+/* Glassmorphism Panels */
+.glass-panel {
+  background: rgba(10, 16, 35, 0.75);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(0, 240, 255, 0.15);
+}
+
+.glass-panel-hover {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.glass-panel-hover:hover {
+  border-color: rgba(0, 240, 255, 0.45);
+  box-shadow: 0 8px 32px 0 rgba(0, 240, 255, 0.12);
+  transform: translateY(-2px);
+}
+
+/* Glowing Neon Borders */
+.border-neon-cyan {
+  border-color: rgba(0, 240, 255, 0.4);
+}
+.border-neon-green {
+  border-color: rgba(0, 255, 157, 0.4);
+}
+.border-neon-amber {
+  border-color: rgba(255, 170, 0, 0.4);
+}
+.border-neon-pink {
+  border-color: rgba(255, 0, 127, 0.4);
+}
+
+/* Glow Shadow Utilities */
+.shadow-glow-cyan {
+  box-shadow: 0 0 20px rgba(0, 240, 255, 0.25);
+}
+.shadow-glow-green {
+  box-shadow: 0 0 20px rgba(0, 255, 157, 0.25);
+}
+.shadow-glow-amber {
+  box-shadow: 0 0 20px rgba(255, 170, 0, 0.25);
+}
+.shadow-glow-pink {
+  box-shadow: 0 0 20px rgba(255, 0, 127, 0.25);
+}
+
+/* HUD Scanline Overlay */
+.scanline-overlay {
+  position: relative;
+}
+.scanline-overlay::after {
+  content: " ";
+  display: block;
+  position: absolute;
+  top: 0; left: 0; bottom: 0; right: 0;
+  background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%);
+  background-size: 100% 4px;
+  z-index: 2;
+  pointer-events: none;
+  opacity: 0.35;
+}
+
+/* Radar Sweep */
+@keyframes radar-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+.animate-radar-sweep {
+  animation: radar-spin 3s linear infinite;
+  transform-origin: center center;
+}
+
+/* Pulse Glow */
+@keyframes neon-pulse {
+  0%, 100% { opacity: 1; filter: drop-shadow(0 0 8px rgba(0, 240, 255, 0.6)); }
+  50% { opacity: 0.6; filter: drop-shadow(0 0 2px rgba(0, 240, 255, 0.2)); }
+}
+.animate-neon-pulse {
+  animation: neon-pulse 2s ease-in-out infinite;
+}
