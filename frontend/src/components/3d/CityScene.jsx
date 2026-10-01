@@ -97,8 +97,8 @@ export function CityScene({ height = '100%', showControls = true }) {
           />
         </mesh>
 
-        {/* Glowing Circuit Lines on Ground */}
-        <gridHelper args={[160, 40, '#00f0ff', '#0b1933']} position={[0, 0.01, 0]} />
+        {/* Subtle Urban Ground Coordinate Grid */}
+        <gridHelper args={[160, 40, '#0e3a5a', '#061324']} position={[0, 0.005, 0]} />
 
         {/* City Geometry Modules */}
         <Buildings />
