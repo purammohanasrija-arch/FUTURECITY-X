@@ -174,21 +174,42 @@ VITE_API_URL=
 
 ## 🌐 DEPLOYMENT GUIDE
 
-### Frontend (Vercel)
-1. Push this repository to GitHub.
-2. Link the repository to [Vercel](https://vercel.com).
-3. Set **Root Directory** to `frontend`.
-4. Build command: `npm run build`
-5. Output directory: `dist`
-6. Set Environment Variable: `VITE_API_URL=https://your-backend.onrender.com/api`
-7. The included `vercel.json` ensures full SPA routing without 404s.
+### ⚡ 1-Click Deploy Links
 
-### Backend (Render)
-1. In [Render](https://render.com), create a new **Web Service**.
-2. Set **Root Directory** to `backend`.
-3. Build Command: `npm install`
-4. Start Command: `npm start`
-5. Add Environment Variables: `JWT_SECRET`, `GEMINI_API_KEY` (optional), and `MONGODB_URI` (optional).
+| Service | Platform | 1-Click Link |
+| :--- | :--- | :--- |
+| **Backend API** | Render | [![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy?repo=https://github.com/purammohanasrija-arch/FUTURECITY-X) |
+| **Frontend UI** | Vercel | [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fpurammohanasrija-arch%2FFUTURECITY-X) |
+
+---
+
+### Step 1: Deploy Backend (Render)
+1. Click the **Deploy to Render** button above, or go to [Render Dashboard](https://dashboard.render.com).
+2. Click **New +** → **Blueprint** (or **Web Service**).
+3. Connect your GitHub repository `purammohanasrija-arch/FUTURECITY-X`.
+4. Render will automatically detect `render.yaml` and configure:
+   - **Root Directory**: `backend`
+   - **Build Command**: `npm install`
+   - **Start Command**: `npm start`
+   - **Health Check Path**: `/api/health`
+5. (Optional) In Environment Variables, add your `GEMINI_API_KEY` for live AI generation. (If omitted, the backend automatically falls back to the adaptive telemetry knowledge engine).
+6. Click **Apply** / **Deploy**.
+7. Once deployed, copy your Render service URL (e.g., `https://futurecity-x-backend.onrender.com`).
+
+---
+
+### Step 2: Deploy Frontend (Vercel)
+1. Click the **Deploy with Vercel** button above, or go to [Vercel New Project](https://vercel.com/new).
+2. Import repository `purammohanasrija-arch/FUTURECITY-X`.
+3. Configure Project Settings:
+   - **Framework Preset**: `Vite`
+   - **Root Directory**: `frontend` (or leave default root `/` as root `vercel.json` is configured)
+   - **Build Command**: `npm run build`
+   - **Output Directory**: `dist`
+4. Under **Environment Variables**, add:
+   - `VITE_API_URL` = `https://<YOUR-RENDER-BACKEND-URL>/api` (e.g. `https://futurecity-x-backend.onrender.com/api`)
+5. Click **Deploy**.
+6. The included `vercel.json` provides automated proxy rewrites and full SPA routing with zero 404 errors.
 
 ---
 
