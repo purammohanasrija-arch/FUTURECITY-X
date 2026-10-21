@@ -45,13 +45,17 @@ export function NotificationToastContainer() {
             </div>
 
             <button
-              onClick={() => {
+              type="button"
+              aria-label="Dismiss alert"
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
                 soundManager.playClick();
                 dismissNotification(n.id);
               }}
-              className="text-slate-400 hover:text-white transition"
+              className="text-slate-400 hover:text-white transition p-1 rounded hover:bg-slate-800/60 cursor-pointer"
             >
-              <X className="w-4 h-4" />
+              <X className="w-4 h-4 pointer-events-none" />
             </button>
           </div>
         );
@@ -74,8 +78,18 @@ export function NotificationDropdown({ isOpen, onClose }) {
             Central Alerts ({notifications.length})
           </span>
         </div>
-        <button onClick={onClose} className="text-slate-400 hover:text-white">
-          <X className="w-4 h-4" />
+        <button
+          type="button"
+          aria-label="Close notification dropdown"
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            soundManager.playClick();
+            if (onClose) onClose();
+          }}
+          className="text-slate-400 hover:text-white p-1 rounded hover:bg-slate-800/60 cursor-pointer transition"
+        >
+          <X className="w-4 h-4 pointer-events-none" />
         </button>
       </div>
 

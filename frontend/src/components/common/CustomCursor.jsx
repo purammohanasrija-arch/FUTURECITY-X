@@ -14,13 +14,22 @@ export function CustomCursor() {
     const onMouseMove = (e) => {
       setPos({ x: e.clientX, y: e.clientY });
       const target = e.target;
-      setIsPointer(
-        window.getComputedStyle(target).cursor === 'pointer' ||
-        target.tagName === 'BUTTON' ||
-        target.tagName === 'A' ||
-        target.closest('button') ||
-        target.closest('a')
-      );
+      if (!target || typeof target.closest !== 'function') {
+        setIsPointer(false);
+        return;
+      }
+      try {
+        const computed = window.getComputedStyle(target);
+        setIsPointer(
+          computed?.cursor === 'pointer' ||
+          target.tagName === 'BUTTON' ||
+          target.tagName === 'A' ||
+          !!target.closest('button') ||
+          !!target.closest('a')
+        );
+      } catch (err) {
+        setIsPointer(false);
+      }
     };
 
     const onMouseDown = () => setClicked(true);
@@ -41,22 +50,22 @@ export function CustomCursor() {
   if (pos.x < 0) return null;
 
   return (
-    <>
+    <div className="pointer-events-none select-none fixed inset-0 z-[9999] overflow-hidden">
       {/* Primary Dot */}
       <div
-        className="fixed pointer-events-none z-[9999] -translate-x-1/2 -translate-y-1/2 transition-transform duration-75"
+        className="pointer-events-none select-none fixed -translate-x-1/2 -translate-y-1/2 transition-transform duration-75"
         style={{
           left: `${pos.x}px`,
           top: `${pos.y}px`,
           transform: `translate(-50%, -50%) scale(${clicked ? 0.7 : isPointer ? 1.4 : 1})`,
         }}
       >
-        <div className={`w-2.5 h-2.5 rounded-full ${isPointer ? 'bg-cyan-300 shadow-neon-cyan' : 'bg-cyan-400'}`} />
+        <div className={`pointer-events-none w-2.5 h-2.5 rounded-full ${isPointer ? 'bg-cyan-300 shadow-neon-cyan' : 'bg-cyan-400'}`} />
       </div>
 
       {/* Outer Hologram Laser Ring */}
       <div
-        className="fixed pointer-events-none z-[9998] -translate-x-1/2 -translate-y-1/2 transition-all duration-150 ease-out"
+        className="pointer-events-none select-none fixed -translate-x-1/2 -translate-y-1/2 transition-all duration-150 ease-out"
         style={{
           left: `${pos.x}px`,
           top: `${pos.y}px`,
@@ -64,11 +73,11 @@ export function CustomCursor() {
         }}
       >
         <div
-          className={`w-7 h-7 rounded-full border ${
+          className={`pointer-events-none w-7 h-7 rounded-full border ${
             isPointer ? 'border-cyan-300 border-dashed animate-spin' : 'border-cyan-500/40'
           }`}
         />
       </div>
-    </>
+    </div>
   );
 }

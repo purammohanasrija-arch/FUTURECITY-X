@@ -1,8 +1,11 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { AIChatModal } from '../components/ai/AIChatModal';
 import { Bot, Sparkles, Cpu, Layers } from 'lucide-react';
 
 export function AIAssistantPage() {
+  const navigate = useNavigate();
+
   return (
     <div className="p-4 sm:p-6 lg:p-8 max-w-5xl mx-auto space-y-6 font-sans">
       <div className="pb-4 border-b border-cyan-500/20">
@@ -19,7 +22,7 @@ export function AIAssistantPage() {
       </div>
 
       <div className="rounded-2xl border border-cyan-500/30 overflow-hidden shadow-2xl bg-[#070d24]">
-        <AIChatModal floating={false} isOpen={true} onClose={() => {}} />
+        <AIChatModal floating={false} isOpen={true} onClose={() => navigate('/')} />
       </div>
     </div>
   );

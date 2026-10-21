@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useCity } from '../../context/CityContext';
 import { soundManager } from '../../utils/sound';
 import {
@@ -21,6 +21,19 @@ import {
 export function ObjectInspectionModal() {
   const { selectedObject, closeInspector } = useCity();
 
+  // Support ESC key to close inspector
+  useEffect(() => {
+    if (!selectedObject) return;
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') {
+        soundManager.playClick();
+        closeInspector();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [selectedObject, closeInspector]);
+
   if (!selectedObject) return null;
 
   const getIcon = () => {
@@ -37,10 +50,21 @@ export function ObjectInspectionModal() {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-fadeIn">
-      <div className="relative w-full max-w-lg p-6 overflow-hidden rounded-2xl bg-[#090f23]/95 border border-cyan-500/40 shadow-neon-cyan text-slate-100 font-sans">
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-md animate-fadeIn"
+      onClick={(e) => {
+        if (e.target === e.currentTarget) {
+          soundManager.playClick();
+          closeInspector();
+        }
+      }}
+    >
+      <div
+        className="relative w-full max-w-lg p-6 overflow-hidden rounded-2xl bg-[#090f23]/95 border border-cyan-500/40 shadow-neon-cyan text-slate-100 font-sans"
+        onClick={(e) => e.stopPropagation()}
+      >
         {/* Hologram scanline & top tech deco */}
-        <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-cyan-400 to-transparent" />
+        <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-cyan-400 to-transparent pointer-events-none" />
         <div className="flex items-center justify-between pb-4 border-b border-cyan-500/20">
           <div className="flex items-center gap-3">
             <div className="p-2.5 rounded-lg bg-cyan-950/60 border border-cyan-500/30">
@@ -56,13 +80,17 @@ export function ObjectInspectionModal() {
             </div>
           </div>
           <button
-            onClick={() => {
+            type="button"
+            aria-label="Close telemetry node inspector"
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
               soundManager.playClick();
               closeInspector();
             }}
-            className="p-1.5 rounded-lg bg-slate-800/60 hover:bg-slate-700/80 text-slate-400 hover:text-white transition"
+            className="p-1.5 rounded-lg bg-slate-800/80 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700 hover:border-cyan-400 transition cursor-pointer z-10 flex items-center justify-center"
           >
-            <X className="w-5 h-5" />
+            <X className="w-5 h-5 pointer-events-none" />
           </button>
         </div>
 
@@ -217,11 +245,14 @@ export function ObjectInspectionModal() {
         {/* Action Button */}
         <div className="flex justify-end pt-3 border-t border-cyan-500/20">
           <button
-            onClick={() => {
+            type="button"
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
               soundManager.playClick();
               closeInspector();
             }}
-            className="px-5 py-2 text-xs font-mono font-bold uppercase rounded-lg bg-cyan-500 hover:bg-cyan-400 text-black shadow-neon-cyan transition"
+            className="px-5 py-2 text-xs font-mono font-bold uppercase rounded-lg bg-cyan-500 hover:bg-cyan-400 text-black shadow-neon-cyan transition cursor-pointer"
           >
             Acknowledge & Close
           </button>

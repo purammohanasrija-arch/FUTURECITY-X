@@ -79,10 +79,17 @@ export function Sidebar({ mobileOpen, onCloseMobile }) {
             FUTURECITY <span className="text-cyan-400">X</span>
           </span>
           <button
-            onClick={onCloseMobile}
-            className="p-1 rounded-lg bg-slate-800 text-slate-400 hover:text-white"
+            type="button"
+            aria-label="Close mobile sidebar"
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              soundManager.playClick();
+              if (onCloseMobile) onCloseMobile();
+            }}
+            className="p-1.5 rounded-lg bg-slate-800/80 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700 hover:border-cyan-400 transition cursor-pointer flex items-center justify-center"
           >
-            <X className="w-5 h-5" />
+            <X className="w-5 h-5 pointer-events-none" />
           </button>
         </div>
 

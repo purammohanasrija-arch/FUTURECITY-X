@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useCity } from '../../context/CityContext';
 import { soundManager } from '../../utils/sound';
 import {
@@ -19,6 +19,19 @@ export function AIOptimizerModal({ isOpen, onClose }) {
   const [applying, setApplying] = useState(false);
   const [applied, setApplied] = useState(false);
 
+  // Support ESC key to close modal
+  useEffect(() => {
+    if (!isOpen) return;
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') {
+        soundManager.playClick();
+        if (onClose) onClose();
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [isOpen, onClose]);
+
   if (!isOpen) return null;
 
   const handleApply = async () => {
@@ -33,10 +46,21 @@ export function AIOptimizerModal({ isOpen, onClose }) {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-md animate-fadeIn font-sans">
-      <div className="relative w-full max-w-3xl overflow-hidden rounded-2xl bg-[#080d22] border border-cyan-500/40 shadow-neon-cyan text-slate-100">
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-md animate-fadeIn font-sans"
+      onClick={(e) => {
+        if (e.target === e.currentTarget) {
+          soundManager.playClick();
+          if (onClose) onClose();
+        }
+      }}
+    >
+      <div
+        className="relative w-full max-w-3xl overflow-hidden rounded-2xl bg-[#080d22] border border-cyan-500/40 shadow-neon-cyan text-slate-100"
+        onClick={(e) => e.stopPropagation()}
+      >
         {/* Top Glow bar */}
-        <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-cyan-400 via-indigo-500 to-emerald-400" />
+        <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-cyan-400 via-indigo-500 to-emerald-400 pointer-events-none" />
 
         {/* Modal Header */}
         <div className="flex items-center justify-between p-6 border-b border-cyan-500/20 bg-slate-900/50">
@@ -54,10 +78,17 @@ export function AIOptimizerModal({ isOpen, onClose }) {
             </div>
           </div>
           <button
-            onClick={onClose}
-            className="p-1.5 rounded-lg bg-slate-800 text-slate-400 hover:text-white"
+            type="button"
+            aria-label="Close AI Optimizer"
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              soundManager.playClick();
+              if (onClose) onClose();
+            }}
+            className="p-1.5 rounded-lg bg-slate-800/80 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700 hover:border-cyan-400 transition cursor-pointer z-10 flex items-center justify-center"
           >
-            <X className="w-5 h-5" />
+            <X className="w-5 h-5 pointer-events-none" />
           </button>
         </div>
 
@@ -157,8 +188,14 @@ export function AIOptimizerModal({ isOpen, onClose }) {
 
           <div className="flex gap-3">
             <button
-              onClick={onClose}
-              className="px-4 py-2 text-xs font-mono rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 transition"
+              type="button"
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                soundManager.playClick();
+                if (onClose) onClose();
+              }}
+              className="px-4 py-2 text-xs font-mono rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition cursor-pointer"
             >
               Cancel
             </button>

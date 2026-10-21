@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useCity } from '../context/CityContext';
 import { HolographicCard } from '../components/common/HolographicCard';
 import { soundManager } from '../utils/sound';
@@ -24,6 +24,19 @@ export function PublicSafetyCenter() {
   const [newType, setNewType] = useState('Traffic Accident');
   const [newSector, setNewSector] = useState('Central District');
   const [newSeverity, setNewSeverity] = useState('High');
+
+  // Support ESC key to close modal
+  useEffect(() => {
+    if (!showCreateModal) return;
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') {
+        soundManager.playClick();
+        setShowCreateModal(false);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [showCreateModal]);
 
   const incidentTypes = ['Traffic Accident', 'Fire', 'Flood', 'Medical Emergency', 'Power Failure', 'Security Incident'];
   const sectors = ['Central District', 'Innovation District', 'Green Valley', 'Industrial Zone', 'Sector 1', 'Sector 2', 'Sector 3', 'Sector 4', 'Metro District'];
@@ -60,14 +73,35 @@ export function PublicSafetyCenter() {
     <div className="p-4 sm:p-6 lg:p-8 space-y-6 max-w-7xl mx-auto font-sans">
       {/* Create Incident Modal */}
       {showCreateModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-md">
-          <div className="relative w-full max-w-lg p-6 rounded-2xl bg-[#080d22] border border-cyan-500/40 shadow-neon-cyan text-white">
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-md animate-fadeIn"
+          onClick={(e) => {
+            if (e.target === e.currentTarget) {
+              soundManager.playClick();
+              setShowCreateModal(false);
+            }
+          }}
+        >
+          <div
+            className="relative w-full max-w-lg p-6 rounded-2xl bg-[#080d22] border border-cyan-500/40 shadow-neon-cyan text-white"
+            onClick={(e) => e.stopPropagation()}
+          >
             <div className="flex items-center justify-between pb-3 border-b border-cyan-500/20">
               <h3 className="text-base font-bold font-display uppercase tracking-wide">
                 Simulate New Civic Incident
               </h3>
-              <button onClick={() => setShowCreateModal(false)} className="text-slate-400 hover:text-white">
-                <X className="w-5 h-5" />
+              <button
+                type="button"
+                aria-label="Close incident modal"
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  soundManager.playClick();
+                  setShowCreateModal(false);
+                }}
+                className="p-1.5 rounded-lg bg-slate-800/80 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700 hover:border-cyan-400 transition cursor-pointer z-10 flex items-center justify-center"
+              >
+                <X className="w-5 h-5 pointer-events-none" />
               </button>
             </div>
 
